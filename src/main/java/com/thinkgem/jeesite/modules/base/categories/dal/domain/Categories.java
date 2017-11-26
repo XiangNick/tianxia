@@ -4,7 +4,7 @@
 package com.thinkgem.jeesite.modules.base.categories.dal.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.persistence.TreeEntity;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
@@ -12,15 +12,15 @@ import javax.validation.constraints.NotNull;
 /**
  * 行业分类Entity
  * @author xiangnick
- * @version 2017-11-25
+ * @version 2017-11-26
  */
-public class Categories extends DataEntity<Categories> {
+public class Categories extends TreeEntity<Categories> {
 	
 	private static final long serialVersionUID = 1L;
 	private Categories parent;		// 父级编号
 	private String parentIds;		// 所有父级编号
 	private String name;		// 名称
-	private String sort;		// 排序
+	private Integer sort;		// 排序
 	
 	public Categories() {
 		super();
@@ -58,12 +58,16 @@ public class Categories extends DataEntity<Categories> {
 		this.name = name;
 	}
 	
-	public String getSort() {
+	@NotNull(message="排序不能为空")
+	public Integer getSort() {
 		return sort;
 	}
 
-	public void setSort(String sort) {
+	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
 	
+	public String getParentId() {
+		return parent != null && parent.getId() != null ? parent.getId() : "0";
+	}
 }
