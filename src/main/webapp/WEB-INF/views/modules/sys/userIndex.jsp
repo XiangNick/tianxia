@@ -5,20 +5,10 @@
 	<title>用户管理</title>
 	<meta name="decorator" content="default"/>
 	<%@include file="/WEB-INF/views/include/treeview.jsp" %>
-	<style type="text/css">
-		.ztree {overflow:auto;margin:0;_margin-top:10px;padding:10px 0 0 10px;}
-	</style>
 </head>
 <body>
 	<sys:message content="${message}"/>
 	<div id="content" class="row-fluid">
-		<div id="left" class="accordion-group">
-			<div class="accordion-heading">
-		    	<a class="accordion-toggle">组织机构<i class="icon-refresh pull-right" onclick="refreshTree();"></i></a>
-		    </div>
-			<div id="ztree" class="ztree"></div>
-		</div>
-		<div id="openClose" class="close">&nbsp;</div>
 		<div id="right">
 			<iframe id="officeContent" src="${ctx}/sys/user/list" width="100%" height="91%" frameborder="0"></iframe>
 		</div>
@@ -31,14 +21,8 @@
 				}
 			}
 		};
-		
-		function refreshTree(){
-			$.getJSON("${ctx}/sys/office/treeData",function(data){
-				$.fn.zTree.init($("#ztree"), setting, data).expandAll(true);
-			});
-		}
-		refreshTree();
-		 
+
+
 		var leftWidth = 180; // 左侧窗口大小
 		var htmlObj = $("html"), mainObj = $("#main");
 		var frameObj = $("#left, #openClose, #right, #right iframe");
