@@ -41,33 +41,9 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">归属公司:</label>
-			<div class="controls">
-				<label class="lbl">${user.company.name}</label>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">归属部门:</label>
-			<div class="controls">
-				<label class="lbl">${user.office.name}</label>
-			</div>
-		</div>
-		<div class="control-group">
 			<label class="control-label">姓名:</label>
 			<div class="controls">
 				<form:input path="name" htmlEscape="false" maxlength="50" class="required" readonly="true"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">邮箱:</label>
-			<div class="controls">
-				<form:input path="email" htmlEscape="false" maxlength="50" class="email"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">电话:</label>
-			<div class="controls">
-				<form:input path="phone" htmlEscape="false" maxlength="50"/>
 			</div>
 		</div>
 		<div class="control-group">

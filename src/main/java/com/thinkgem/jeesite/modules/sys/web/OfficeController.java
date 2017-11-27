@@ -3,11 +3,17 @@
  */
 package com.thinkgem.jeesite.modules.sys.web;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.sys.entity.Office;
+import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.sys.service.AreaService;
+import com.thinkgem.jeesite.modules.sys.service.OfficeService;
+import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,16 +24,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.thinkgem.jeesite.common.config.Global;
-import com.thinkgem.jeesite.common.utils.StringUtils;
-import com.thinkgem.jeesite.common.web.BaseController;
-import com.thinkgem.jeesite.modules.sys.entity.Office;
-import com.thinkgem.jeesite.modules.sys.entity.User;
-import com.thinkgem.jeesite.modules.sys.service.OfficeService;
-import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
-import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 机构Controller
@@ -40,7 +39,9 @@ public class OfficeController extends BaseController {
 
 	@Autowired
 	private OfficeService officeService;
-	
+	@Autowired
+	private AreaService areaService;
+
 	@ModelAttribute("office")
 	public Office get(@RequestParam(required=false) String id) {
 		if (StringUtils.isNotBlank(id)){
@@ -69,11 +70,11 @@ public class OfficeController extends BaseController {
 	public String form(Office office, Model model) {
 		User user = UserUtils.getUser();
 		if (office.getParent()==null || office.getParent().getId()==null){
-			office.setParent(user.getOffice());
+			office.setParent(officeService.getFirst());
 		}
 		office.setParent(officeService.get(office.getParent().getId()));
 		if (office.getArea()==null){
-			office.setArea(user.getOffice().getArea());
+			office.setArea(areaService.getFirst());
 		}
 		// 自动获取排序号
 		if (StringUtils.isBlank(office.getId())&&office.getParent()!=null){

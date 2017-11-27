@@ -3,16 +3,15 @@
  */
 package com.thinkgem.jeesite.common.service;
 
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.sys.entity.Role;
 import com.thinkgem.jeesite.modules.sys.entity.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Service基类
@@ -50,22 +49,22 @@ public abstract class BaseService {
 						if (Role.DATA_SCOPE_ALL.equals(r.getDataScope())){
 							isDataScopeAll = true;
 						}
-						else if (Role.DATA_SCOPE_COMPANY_AND_CHILD.equals(r.getDataScope())){
-							sqlString.append(" OR " + oa + ".id = '" + user.getCompany().getId() + "'");
-							sqlString.append(" OR " + oa + ".parent_ids LIKE '" + user.getCompany().getParentIds() + user.getCompany().getId() + ",%'");
-						}
-						else if (Role.DATA_SCOPE_COMPANY.equals(r.getDataScope())){
-							sqlString.append(" OR " + oa + ".id = '" + user.getCompany().getId() + "'");
-							// 包括本公司下的部门 （type=1:公司；type=2：部门）
-							sqlString.append(" OR (" + oa + ".parent_id = '" + user.getCompany().getId() + "' AND " + oa + ".type = '2')");
-						}
-						else if (Role.DATA_SCOPE_OFFICE_AND_CHILD.equals(r.getDataScope())){
-							sqlString.append(" OR " + oa + ".id = '" + user.getOffice().getId() + "'");
-							sqlString.append(" OR " + oa + ".parent_ids LIKE '" + user.getOffice().getParentIds() + user.getOffice().getId() + ",%'");
-						}
-						else if (Role.DATA_SCOPE_OFFICE.equals(r.getDataScope())){
-							sqlString.append(" OR " + oa + ".id = '" + user.getOffice().getId() + "'");
-						}
+//						else if (Role.DATA_SCOPE_COMPANY_AND_CHILD.equals(r.getDataScope())){
+//							sqlString.append(" OR " + oa + ".id = '" + user.getCompany().getId() + "'");
+//							sqlString.append(" OR " + oa + ".parent_ids LIKE '" + user.getCompany().getParentIds() + user.getCompany().getId() + ",%'");
+//						}
+//						else if (Role.DATA_SCOPE_COMPANY.equals(r.getDataScope())){
+//							sqlString.append(" OR " + oa + ".id = '" + user.getCompany().getId() + "'");
+//							// 包括本公司下的部门 （type=1:公司；type=2：部门）
+//							sqlString.append(" OR (" + oa + ".parent_id = '" + user.getCompany().getId() + "' AND " + oa + ".type = '2')");
+//						}
+//						else if (Role.DATA_SCOPE_OFFICE_AND_CHILD.equals(r.getDataScope())){
+//							sqlString.append(" OR " + oa + ".id = '" + user.getOffice().getId() + "'");
+//							sqlString.append(" OR " + oa + ".parent_ids LIKE '" + user.getOffice().getParentIds() + user.getOffice().getId() + ",%'");
+//						}
+//						else if (Role.DATA_SCOPE_OFFICE.equals(r.getDataScope())){
+//							sqlString.append(" OR " + oa + ".id = '" + user.getOffice().getId() + "'");
+//						}
 						else if (Role.DATA_SCOPE_CUSTOM.equals(r.getDataScope())){
 							String officeIds =  StringUtils.join(r.getOfficeIdList(), "','");
 							if (StringUtils.isNotEmpty(officeIds)){

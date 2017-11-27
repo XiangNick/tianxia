@@ -5,6 +5,7 @@ package com.thinkgem.jeesite.modules.sys.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +23,15 @@ import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 @Transactional(readOnly = true)
 public class AreaService extends TreeService<AreaDao, Area> {
 
+	@Autowired
+	private AreaDao areaDao;
+
 	public List<Area> findAll(){
 		return UserUtils.getAreaList();
+	}
+
+	public Area getFirst(){
+		return areaDao.getFirst();
 	}
 
 	@Transactional(readOnly = false)

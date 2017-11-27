@@ -48,7 +48,15 @@
 		<include refid="officeJoins"/>
 		WHERE a.id = #{id}
 	</select>
-	
+
+	<select id="getFirst" resultType="Office">
+		SELECT
+		<include refid="officeColumns"/>
+		FROM sys_office a
+		<include refid="officeJoins"/>
+		limit 1
+	</select>
+
 	<select id="findList" resultType="Office">
 		SELECT
 			<include refid="officeColumns"/>

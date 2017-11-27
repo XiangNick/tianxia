@@ -14,5 +14,9 @@ import com.thinkgem.jeesite.modules.sys.entity.Office;
  */
 @MyBatisDao
 public interface OfficeDao extends TreeDao<Office> {
-	
+    /**
+     * 获取第一条记录
+     * @return 第一条记录
+     */
+    Office getFirst();
 }

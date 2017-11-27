@@ -3,11 +3,18 @@
  */
 package com.thinkgem.jeesite.modules.sys.web;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.utils.Collections3;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.sys.entity.Role;
+import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.sys.service.OfficeService;
+import com.thinkgem.jeesite.modules.sys.service.SystemService;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,19 +25,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.thinkgem.jeesite.common.config.Global;
-import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.utils.Collections3;
-import com.thinkgem.jeesite.common.utils.StringUtils;
-import com.thinkgem.jeesite.common.web.BaseController;
-import com.thinkgem.jeesite.modules.sys.entity.Office;
-import com.thinkgem.jeesite.modules.sys.entity.Role;
-import com.thinkgem.jeesite.modules.sys.entity.User;
-import com.thinkgem.jeesite.modules.sys.service.OfficeService;
-import com.thinkgem.jeesite.modules.sys.service.SystemService;
-import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 角色Controller
@@ -68,7 +65,7 @@ public class RoleController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(Role role, Model model) {
 		if (role.getOffice()==null){
-			role.setOffice(UserUtils.getUser().getOffice());
+			role.setOffice(officeService.getFirst());
 		}
 		model.addAttribute("role", role);
 		model.addAttribute("menuList", systemService.findAllMenu());
@@ -168,7 +165,6 @@ public class RoleController extends BaseController {
 	public List<Map<String, Object>> users(String officeId, HttpServletResponse response) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 		User user = new User();
-		user.setOffice(new Office(officeId));
 		Page<User> page = systemService.findUser(new Page<User>(1, -1), user);
 		for (User e : page.getList()) {
 			Map<String, Object> map = Maps.newHashMap();
@@ -260,8 +256,8 @@ public class RoleController extends BaseController {
 
 	/**
 	 * 验证角色英文名是否有效
-	 * @param oldName
-	 * @param name
+	 * @param
+	 * @param
 	 * @return
 	 */
 	@RequiresPermissions("user")

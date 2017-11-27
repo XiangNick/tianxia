@@ -30,7 +30,15 @@
 		<include refid="areaJoins"/>
 		WHERE a.id = #{id}
 	</select>
-	
+
+	<select id="getFirst" resultType="Area">
+		SELECT
+		<include refid="areaColumns"/>
+		FROM sys_area a
+		<include refid="areaJoins"/>
+		limit 1
+	</select>
+
 	<select id="findList" resultType="Area">
 		SELECT
 			<include refid="areaColumns"/>

@@ -3,27 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.sys.web;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolationException;
-
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.thinkgem.jeesite.common.beanvalidator.BeanValidators;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
@@ -32,11 +12,22 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.utils.excel.ExportExcel;
 import com.thinkgem.jeesite.common.utils.excel.ImportExcel;
 import com.thinkgem.jeesite.common.web.BaseController;
-import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.Role;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.sys.service.SystemService;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
+import java.util.List;
 
 /**
  * 用户Controller
@@ -76,12 +67,6 @@ public class UserController extends BaseController {
 	@RequiresPermissions("sys:user:view")
 	@RequestMapping(value = "form")
 	public String form(User user, Model model) {
-		if (user.getCompany()==null || user.getCompany().getId()==null){
-			user.setCompany(UserUtils.getUser().getCompany());
-		}
-		if (user.getOffice()==null || user.getOffice().getId()==null){
-			user.setOffice(UserUtils.getUser().getOffice());
-		}
 		model.addAttribute("user", user);
 		model.addAttribute("allRoles", systemService.findAllRole());
 		return "modules/sys/userForm";
@@ -94,9 +79,6 @@ public class UserController extends BaseController {
 			addMessage(redirectAttributes, "演示模式，不允许操作！");
 			return "redirect:" + adminPath + "/sys/user/list?repage";
 		}
-		// 修正引用赋值问题，不知道为何，Company和Office引用的一个实例地址，修改了一个，另外一个跟着修改。
-		user.setCompany(new Office(request.getParameter("company.id")));
-		user.setOffice(new Office(request.getParameter("office.id")));
 		// 如果新密码为空，则不更换密码
 		if (StringUtils.isNotBlank(user.getNewPassword())) {
 			user.setPassword(SystemService.entryptPassword(user.getNewPassword()));
@@ -272,8 +254,6 @@ public class UserController extends BaseController {
 				model.addAttribute("message", "演示模式，不允许操作！");
 				return "modules/sys/userInfo";
 			}
-			currentUser.setEmail(user.getEmail());
-			currentUser.setPhone(user.getPhone());
 			currentUser.setMobile(user.getMobile());
 			currentUser.setRemarks(user.getRemarks());
 			currentUser.setPhoto(user.getPhoto());
@@ -322,24 +302,24 @@ public class UserController extends BaseController {
 		model.addAttribute("user", user);
 		return "modules/sys/userModifyPwd";
 	}
-	
-	@RequiresPermissions("user")
-	@ResponseBody
-	@RequestMapping(value = "treeData")
-	public List<Map<String, Object>> treeData(@RequestParam(required=false) String officeId, HttpServletResponse response) {
-		List<Map<String, Object>> mapList = Lists.newArrayList();
-		List<User> list = systemService.findUserByOfficeId(officeId);
-		for (int i=0; i<list.size(); i++){
-			User e = list.get(i);
-			Map<String, Object> map = Maps.newHashMap();
-			map.put("id", "u_"+e.getId());
-			map.put("pId", officeId);
-			map.put("name", StringUtils.replace(e.getName(), " ", ""));
-			mapList.add(map);
-		}
-		return mapList;
-	}
-    
+//
+//	@RequiresPermissions("user")
+//	@ResponseBody
+//	@RequestMapping(value = "treeData")
+//	public List<Map<String, Object>> treeData(@RequestParam(required=false) String officeId, HttpServletResponse response) {
+//		List<Map<String, Object>> mapList = Lists.newArrayList();
+//		List<User> list = systemService.findUserByOfficeId(officeId);
+//		for (int i=0; i<list.size(); i++){
+//			User e = list.get(i);
+//			Map<String, Object> map = Maps.newHashMap();
+//			map.put("id", "u_"+e.getId());
+//			map.put("pId", officeId);
+//			map.put("name", StringUtils.replace(e.getName(), " ", ""));
+//			mapList.add(map);
+//		}
+//		return mapList;
+//	}
+
 //	@InitBinder
 //	public void initBinder(WebDataBinder b) {
 //		b.registerCustomEditor(List.class, "roleList", new PropertyEditorSupport(){

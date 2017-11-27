@@ -3,15 +3,6 @@
  */
 package com.thinkgem.jeesite.modules.sys.service;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.shiro.session.Session;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.security.Digests;
@@ -25,11 +16,18 @@ import com.thinkgem.jeesite.modules.sys.dao.MenuDao;
 import com.thinkgem.jeesite.modules.sys.dao.RoleDao;
 import com.thinkgem.jeesite.modules.sys.dao.UserDao;
 import com.thinkgem.jeesite.modules.sys.entity.Menu;
-import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.Role;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.sys.utils.LogUtils;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
+import org.apache.shiro.session.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 系统管理，安全相关实体的管理类,包括用户、角色、菜单.
@@ -99,23 +97,7 @@ public class SystemService extends BaseService {
 		return list;
 	}
 
-	/**
-	 * 通过部门ID获取用户列表，仅返回用户id和name（树查询用户时用）
-	 * @param user
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public List<User> findUserByOfficeId(String officeId) {
-		List<User> list = (List<User>)CacheUtils.get(UserUtils.USER_CACHE, UserUtils.USER_CACHE_LIST_BY_OFFICE_ID_ + officeId);
-		if (list == null){
-			User user = new User();
-			user.setOffice(new Office(officeId));
-			list = userDao.findUserByOfficeId(user);
-			CacheUtils.put(UserUtils.USER_CACHE, UserUtils.USER_CACHE_LIST_BY_OFFICE_ID_ + officeId, list);
-		}
-		return list;
-	}
-	
+
 	@Transactional(readOnly = false)
 	public void saveUser(User user) {
 		if (StringUtils.isBlank(user.getId())){
@@ -124,9 +106,6 @@ public class SystemService extends BaseService {
 		}else{
 			// 清除原用户机构用户缓存
 			User oldUser = userDao.get(user.getId());
-			if (oldUser.getOffice() != null && oldUser.getOffice().getId() != null){
-				CacheUtils.remove(UserUtils.USER_CACHE, UserUtils.USER_CACHE_LIST_BY_OFFICE_ID_ + oldUser.getOffice().getId());
-			}
 			// 更新用户数据
 			user.preUpdate();
 			userDao.update(user);

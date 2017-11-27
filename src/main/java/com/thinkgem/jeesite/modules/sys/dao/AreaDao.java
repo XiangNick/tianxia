@@ -14,5 +14,9 @@ import com.thinkgem.jeesite.modules.sys.entity.Area;
  */
 @MyBatisDao
 public interface AreaDao extends TreeDao<Area> {
-	
+
+    /** 获取第一条数据
+     * @return 获取第一条数据
+     */
+    Area getFirst();
 }
