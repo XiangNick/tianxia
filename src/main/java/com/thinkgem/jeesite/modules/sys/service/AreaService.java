@@ -45,5 +45,14 @@ public class AreaService extends TreeService<AreaDao, Area> {
 		super.delete(area);
 		UserUtils.removeCache(UserUtils.CACHE_AREA_LIST);
 	}
-	
+
+	@Transactional(readOnly = true)
+	public List<Area> findByType(String type){
+		return areaDao.findByType(type);
+	}
+
+	@Transactional(readOnly = true)
+	public List<Area> findByLinkage(String parentId){
+		return areaDao.findByLinkage(parentId);
+	}
 }

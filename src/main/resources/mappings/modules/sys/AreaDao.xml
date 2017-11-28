@@ -15,19 +15,14 @@
 		a.create_date,
 		a.update_by AS "updateBy.id",
 		a.update_date,
-		a.del_flag,
-		p.name AS "parent.name"
+		a.del_flag
 	</sql>
 	
-	<sql id="areaJoins">
-		LEFT JOIN sys_office p ON p.id = a.parent_id
-    </sql>
-    
+
 	<select id="get" resultType="Area">
 		SELECT
 			<include refid="areaColumns"/>
 		FROM sys_area a
-		<include refid="areaJoins"/>
 		WHERE a.id = #{id}
 	</select>
 
@@ -35,15 +30,32 @@
 		SELECT
 		<include refid="areaColumns"/>
 		FROM sys_area a
-		<include refid="areaJoins"/>
 		limit 1
 	</select>
 
+	<select id="findByType" resultType="Area">
+		SELECT
+		<include refid="areaColumns"/>
+		FROM sys_area a
+		where
+		type = #{type}
+		order by sort asc
+	</select>
+
+	<select id="findByLinkage" resultType="Area">
+		SELECT
+		<include refid="areaColumns"/>
+		FROM sys_area a
+		where
+		a.parent_id = #{parentId}
+		order by sort asc
+	</select>
+
+
 	<select id="findList" resultType="Area">
 		SELECT
-			<include refid="areaColumns"/>
+		<include refid="areaColumns"/>
 		FROM sys_area a
-		<include refid="areaJoins"/>
 		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
 		<!-- 数据范围过滤 -->
 		${sqlMap.dsf}
@@ -55,7 +67,6 @@
 		SELECT
 			<include refid="areaColumns"/>
 		FROM sys_area a
-		<include refid="areaJoins"/>
 		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
 		ORDER BY a.code
 	</select>
