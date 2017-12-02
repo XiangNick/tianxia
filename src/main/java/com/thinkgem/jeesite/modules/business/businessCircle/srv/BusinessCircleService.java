@@ -7,6 +7,7 @@ import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.modules.business.businessCircle.dal.dao.BusinessCircleDao;
 import com.thinkgem.jeesite.modules.business.businessCircle.dal.domain.BusinessCircle;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,9 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 public class BusinessCircleService extends CrudService<BusinessCircleDao, BusinessCircle> {
+
+	@Autowired
+	private BusinessCircleDao businessCircleDao;
 
 	public BusinessCircle get(String id) {
 		return super.get(id);
@@ -42,5 +46,13 @@ public class BusinessCircleService extends CrudService<BusinessCircleDao, Busine
 	public void delete(BusinessCircle businessCircle) {
 		super.delete(businessCircle);
 	}
-	
+
+	/**
+	 * 根据商圈id获取商圈的省市区冗余字段
+	 * @param circleId
+	 * @return
+	 */
+	public String getCirclePCRByCircleId(String circleId) {
+		return 	businessCircleDao.getCirclePCRByCircleId(circleId);
+	}
 }

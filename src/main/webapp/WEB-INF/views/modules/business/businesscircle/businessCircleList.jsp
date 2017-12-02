@@ -105,7 +105,8 @@
 			<tr>
 				<th>商圈名称</th>
 				<th>省市区</th>
-				<th>门店数量</th>
+				<th>详细地址</th>
+				<th>商户数量</th>
 				<th>备注信息</th>
 				<th>更新时间</th>
 				<shiro:hasPermission name="business:businesscircle:businessCircle:edit"><th>操作</th></shiro:hasPermission>
@@ -119,6 +120,9 @@
 				</a></td>
 				<td>
 						${businessCircle.location}
+				</td>
+				<td>
+						${businessCircle.detailLocation}
 				</td>
 				<td>
 					TODO

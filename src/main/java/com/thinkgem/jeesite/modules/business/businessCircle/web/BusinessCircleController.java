@@ -116,4 +116,14 @@ public class BusinessCircleController extends BaseController {
 		return areaService.findByLinkage(parentId);
 	}
 
+	/**
+	 * 根据商圈id获取商圈的省市区冗余字段
+	 * @param circleId
+	 * @return
+	 */
+	@RequestMapping(value = "getCirclePCRByCircleId",method = RequestMethod.POST)
+	@ResponseBody
+	public String getCirclePCRByCircleId(String circleId){
+		return	businessCircleService.getCirclePCRByCircleId(circleId);
+	}
 }

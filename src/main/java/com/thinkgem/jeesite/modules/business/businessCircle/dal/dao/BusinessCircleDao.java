@@ -14,5 +14,11 @@ import com.thinkgem.jeesite.modules.business.businessCircle.dal.domain.BusinessC
  */
 @MyBatisDao
 public interface BusinessCircleDao extends CrudDao<BusinessCircle> {
-	
+
+    /**
+     * 根据商圈id获取商圈的省市区冗余字段
+     * @param circleId
+     * @return
+     */
+    String getCirclePCRByCircleId(String circleId);
 }

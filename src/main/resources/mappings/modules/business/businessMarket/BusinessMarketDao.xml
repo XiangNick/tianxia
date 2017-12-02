@@ -1,40 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.thinkgem.jeesite.modules.business.businessCircle.dal.dao.BusinessCircleDao">
+<mapper namespace="com.thinkgem.jeesite.modules.business.businessMarket.dal.dao.BusinessMarketDao">
     
-	<sql id="businessCircleColumns">
+	<sql id="businessMarketColumns">
 		a.id AS "id",
+		a.circle_id AS "circleId",
 		a.name AS "name",
 		a.description AS "description",
-		a.province AS "province",
-		a.city AS "city",
-		a.region AS "region",
-		a.detail_location AS "detailLocation",
+		a.location AS "location",
+		a.location_detail AS "locationDetail",
+		a.open_time AS "openTime",
+		a.phone AS "phone",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
-		a.location AS "location"
+		c.name AS "circleName"
 	</sql>
 	
-	<sql id="businessCircleJoins">
+	<sql id="businessMarketJoins">
+		LEFT JOIN business_circle c ON a.circle_id = c.id
 	</sql>
     
-	<select id="get" resultType="BusinessCircle">
+	<select id="get" resultType="BusinessMarket">
 		SELECT 
-			<include refid="businessCircleColumns"/>
-		FROM business_circle a
-		<include refid="businessCircleJoins"/>
+			<include refid="businessMarketColumns"/>
+		FROM business_market a
+		<include refid="businessMarketJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="findList" resultType="BusinessCircle">
+	<select id="findList" resultType="BusinessMarket">
 		SELECT 
-			<include refid="businessCircleColumns"/>
-		FROM business_circle a
-		<include refid="businessCircleJoins"/>
+			<include refid="businessMarketColumns"/>
+		FROM business_market a
+		<include refid="businessMarketJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="name != null and name != ''">
@@ -42,15 +44,6 @@
 					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
 					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
-			</if>
-			<if test="province != null and province!= ''">
-				AND a.province = #{province}
-			</if>
-			<if test="city != null and city!= ''">
-				AND a.city = #{city}
-			</if>
-			<if test="region != null and region!= ''">
-				AND a.region = #{region}
 			</if>
 		</where>
 		<choose>
@@ -63,11 +56,11 @@
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="BusinessCircle">
+	<select id="findAllList" resultType="BusinessMarket">
 		SELECT 
-			<include refid="businessCircleColumns"/>
-		FROM business_circle a
-		<include refid="businessCircleJoins"/>
+			<include refid="businessMarketColumns"/>
+		FROM business_market a
+		<include refid="businessMarketJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 		</where>		
@@ -82,56 +75,56 @@
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO business_circle(
+		INSERT INTO business_market(
 			id,
+			circle_id,
 			name,
 			description,
-			province,
-			city,
-			region,
-			detail_location,
+			location,
+			location_detail,
+			open_time,
+			phone,
 			create_by,
 			create_date,
 			update_by,
 			update_date,
 			remarks,
-			del_flag,
-			location
+			del_flag
 		) VALUES (
 			#{id},
+			#{circleId},
 			#{name},
 			#{description},
-			#{province},
-			#{city},
-			#{region},
-			#{detailLocation},
+			#{location},
+			#{locationDetail},
+			#{openTime},
+			#{phone},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},
 			#{updateDate},
 			#{remarks},
-			#{delFlag},
-			#{location}
+			#{delFlag}
 		)
 	</insert>
 	
 	<update id="update">
-		UPDATE business_circle SET 	
+		UPDATE business_market SET 	
+			circle_id = #{circleId},
 			name = #{name},
 			description = #{description},
-			province = #{province},
-			city = #{city},
-			region = #{region},
-			detail_location = #{detailLocation},
+			location = #{location},
+			location_detail = #{locationDetail},
+			open_time = #{openTime},
+			phone = #{phone},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
-			remarks = #{remarks},
-			location = #{location}
+			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
 	
 	<update id="delete">
-		UPDATE business_circle SET 
+		UPDATE business_market SET 
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
