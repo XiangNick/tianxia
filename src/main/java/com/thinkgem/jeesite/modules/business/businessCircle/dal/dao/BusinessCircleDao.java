@@ -10,7 +10,7 @@ import com.thinkgem.jeesite.modules.business.businessCircle.dal.domain.BusinessC
 /**
  * 商圈管理DAO接口
  * @author xiangnick
- * @version 2017-11-28
+ * @version 2017-11-30
  */
 @MyBatisDao
 public interface BusinessCircleDao extends CrudDao<BusinessCircle> {

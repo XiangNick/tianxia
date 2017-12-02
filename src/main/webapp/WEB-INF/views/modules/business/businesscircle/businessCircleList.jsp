@@ -37,8 +37,10 @@
 		<thead>
 			<tr>
 				<th>商圈名称</th>
-				<th>更新时间</th>
+				<th>省市区</th>
+				<th>门店数量</th>
 				<th>备注信息</th>
+				<th>更新时间</th>
 				<shiro:hasPermission name="business:businesscircle:businessCircle:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -49,10 +51,16 @@
 					${businessCircle.name}
 				</a></td>
 				<td>
-					<fmt:formatDate value="${businessCircle.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+						${businessCircle.location}
 				</td>
 				<td>
-					${businessCircle.remarks}
+					TODO
+				</td>
+				<td>
+						${businessCircle.remarks}
+				</td>
+				<td>
+					<fmt:formatDate value="${businessCircle.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<shiro:hasPermission name="business:businesscircle:businessCircle:edit"><td>
     				<a href="${ctx}/business/businesscircle/businessCircle/form?id=${businessCircle.id}">修改</a>

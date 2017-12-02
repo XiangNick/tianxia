@@ -10,23 +10,25 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.business.businessCircle.dal.domain.BusinessCircle;
 import com.thinkgem.jeesite.modules.business.businessCircle.srv.BusinessCircleService;
+import com.thinkgem.jeesite.modules.sys.entity.Area;
+import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.sys.service.AreaService;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 商圈管理Controller
  * @author xiangnick
- * @version 2017-11-28
+ * @version 2017-11-30
  */
 @Controller
 @RequestMapping(value = "${adminPath}/business/businesscircle/businessCircle")
@@ -36,6 +38,7 @@ public class BusinessCircleController extends BaseController {
 	private BusinessCircleService businessCircleService;
 	@Autowired
 	private AreaService areaService;
+
 
 	@ModelAttribute
 	public BusinessCircle get(@RequestParam(required=false) String id) {
@@ -48,7 +51,7 @@ public class BusinessCircleController extends BaseController {
 		}
 		return entity;
 	}
-	
+
 	@RequiresPermissions("business:businesscircle:businessCircle:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(BusinessCircle businessCircle, HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -62,8 +65,19 @@ public class BusinessCircleController extends BaseController {
 	public String form(BusinessCircle businessCircle, Model model) {
 		model.addAttribute("businessCircle", businessCircle);
 		model.addAttribute("provinceList",areaService.findByType(AreaType.PROVINCE.getCode()));
+		String provinceId = businessCircle.getProvince();
+		if(StringUtils.isNotBlank(provinceId)){
+			List<Area> cityList = areaService.findByLinkage(provinceId);
+			model.addAttribute("cityList",cityList);
+			String cityId = businessCircle.getCity();
+			if(StringUtils.isNotBlank(cityId)){
+				List<Area> regionList = areaService.findByLinkage(cityId);
+				model.addAttribute("regionList",regionList);
+			}
+		}
 		return "modules/business/businesscircle/businessCircleForm";
 	}
+
 
 	@RequiresPermissions("business:businesscircle:businessCircle:edit")
 	@RequestMapping(value = "save")
@@ -71,17 +85,25 @@ public class BusinessCircleController extends BaseController {
 		if (!beanValidator(model, businessCircle)){
 			return form(businessCircle, model);
 		}
+		User user = UserUtils.getUser();
+		businessCircle.setUpdateBy(user);
 		businessCircleService.save(businessCircle);
 		addMessage(redirectAttributes, "保存商圈成功");
 		return "redirect:"+ Global.getAdminPath()+"/business/businesscircle/businessCircle/?repage";
 	}
-	
+
 	@RequiresPermissions("business:businesscircle:businessCircle:edit")
 	@RequestMapping(value = "delete")
 	public String delete(BusinessCircle businessCircle, RedirectAttributes redirectAttributes) {
 		businessCircleService.delete(businessCircle);
 		addMessage(redirectAttributes, "删除商圈成功");
 		return "redirect:"+ Global.getAdminPath()+"/business/businesscircle/businessCircle/?repage";
+	}
+
+	@RequestMapping(value = "linkage",method = RequestMethod.POST)
+	@ResponseBody
+	public List<Area> linkage(String parentId){
+		return areaService.findByLinkage(parentId);
 	}
 
 }

@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.Length;
 /**
  * 商圈管理Entity
  * @author xiangnick
- * @version 2017-11-28
+ * @version 2017-11-30
  */
 public class BusinessCircle extends DataEntity<BusinessCircle> {
 	
@@ -20,6 +20,7 @@ public class BusinessCircle extends DataEntity<BusinessCircle> {
 	private String city;		// 商圈所属市id
 	private String region;		// 商圈所属地区id
 	private String detailLocation;		// 详细地址
+	private String location;		// 存储省市区名称的冗余字段
 	
 	public BusinessCircle() {
 		super();
@@ -80,6 +81,15 @@ public class BusinessCircle extends DataEntity<BusinessCircle> {
 
 	public void setDetailLocation(String detailLocation) {
 		this.detailLocation = detailLocation;
+	}
+	
+	@Length(min=0, max=64, message="存储省市区名称的冗余字段长度必须介于 0 和 64 之间")
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 	
 }
