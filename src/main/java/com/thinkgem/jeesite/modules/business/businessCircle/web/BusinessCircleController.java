@@ -57,14 +57,17 @@ public class BusinessCircleController extends BaseController {
 	public String list(BusinessCircle businessCircle, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<BusinessCircle> page = businessCircleService.findPage(new Page<BusinessCircle>(request, response), businessCircle);
 		model.addAttribute("page", page);
+		model.addAttribute("provinceList",areaService.findByType(AreaType.PROVINCE.getCode()));
+		addPCRData(businessCircle,model);
 		return "modules/business/businesscircle/businessCircleList";
 	}
 
-	@RequiresPermissions("business:businesscircle:businessCircle:view")
-	@RequestMapping(value = "form")
-	public String form(BusinessCircle businessCircle, Model model) {
-		model.addAttribute("businessCircle", businessCircle);
-		model.addAttribute("provinceList",areaService.findByType(AreaType.PROVINCE.getCode()));
+	/**
+	 * 添加省市区到页面model
+	 * @param businessCircle
+	 * @param model
+	 */
+	private void addPCRData(BusinessCircle businessCircle,Model model){
 		String provinceId = businessCircle.getProvince();
 		if(StringUtils.isNotBlank(provinceId)){
 			List<Area> cityList = areaService.findByLinkage(provinceId);
@@ -75,6 +78,13 @@ public class BusinessCircleController extends BaseController {
 				model.addAttribute("regionList",regionList);
 			}
 		}
+	}
+	@RequiresPermissions("business:businesscircle:businessCircle:view")
+	@RequestMapping(value = "form")
+	public String form(BusinessCircle businessCircle, Model model) {
+		model.addAttribute("businessCircle", businessCircle);
+		model.addAttribute("provinceList",areaService.findByType(AreaType.PROVINCE.getCode()));
+		addPCRData(businessCircle,model);
 		return "modules/business/businesscircle/businessCircleForm";
 	}
 

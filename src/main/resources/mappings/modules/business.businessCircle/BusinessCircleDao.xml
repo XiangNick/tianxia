@@ -43,6 +43,15 @@
 					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
 			</if>
+			<if test="province != null and province!= ''">
+				AND a.province = #{province}
+			</if>
+			<if test="city != null and city!= ''">
+				AND a.city = #{city}
+			</if>
+			<if test="region != null and region!= ''">
+				AND a.region = #{region}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">

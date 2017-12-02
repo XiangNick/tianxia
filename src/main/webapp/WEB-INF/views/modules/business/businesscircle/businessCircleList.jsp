@@ -6,7 +6,51 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			
+            var todoStr = "<option value=''>---请选择---</option>";
+            $("#province").change(function () {
+                $("#city").find("option").remove();
+                $("#city").append(todoStr);
+                $(".select2-chosen")[1].innerText = '---请选择---';
+                $("#region").find("option").remove();
+                $("#region").append(todoStr);
+                $(".select2-chosen")[2].innerText = '---请选择---';
+                var parentId = $(this).val();
+                $.ajax({
+                    url: "/a/business/businesscircle/businessCircle/linkage",
+                    type: "POST",
+                    data: {"parentId": parentId},
+                    success: function (data) {
+                        var html = "";
+                        for (var i = 0; i < data.length; i++) {
+                            var name = data[i].name;
+                            var id = data[i].id;
+                            html += "<option value=" + id + ">" + name + "</option>";
+                        }
+                        $("#city").append(html);
+                    }
+                });
+            });
+
+            $("#city").change(function () {
+                $("#region").find("option").remove();
+                $("#region").append(todoStr);
+                $(".select2-chosen")[2].innerText = '---请选择---';
+                var parentId = $(this).val();
+                $.ajax({
+                    url: "/a/business/businesscircle/businessCircle/linkage",
+                    type: "POST",
+                    data: {"parentId": parentId},
+                    success: function (data) {
+                        var html = "";
+                        for (var i = 0; i < data.length; i++) {
+                            var name = data[i].name;
+                            var id = data[i].id;
+                            html += "<option value=" + id + ">" + name + "</option>";
+                        }
+                        $("#region").append(html);
+                    }
+                });
+            });
 		});
 		function page(n,s){
 			$("#pageNo").val(n);
@@ -24,11 +68,34 @@
 	<form:form id="searchForm" modelAttribute="businessCircle" action="${ctx}/business/businesscircle/businessCircle/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		<ul class="ul-form">
+		<li class="ul-form">
 			<li><label>商圈名称：</label>
 				<form:input path="name" htmlEscape="false" maxlength="200" class="input-medium"/>
 			</li>
-			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
+		<li>
+			<label>省：</label>
+				<form:select path="province" id="province" class="input-small">
+					<form:option value="" label="---请选择---"/>
+					<c:forEach items="${provinceList}" var="province">
+						<form:option value="${province.id}" label="${province.name}"/>
+					</c:forEach>
+				</form:select>
+			<label>市：</label>
+				<form:select path="city" id="city" class="input-small">
+					<option value="">---请选择---</option>
+					<c:forEach items="${cityList}" var="city">
+						<form:option value="${city.id}" label="${city.name}"/>
+					</c:forEach>
+				</form:select>
+			<label>区：</label>
+				<form:select path="region" id="region" class="input-small">
+					<option value="">---请选择---</option>
+					<c:forEach items="${regionList}" var="region">
+						<form:option value="${region.id}" label="${region.name}"/>
+					</c:forEach>
+				</form:select>
+		</li>
+			<li class="btns" style="margin-left:15px;"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
 		</ul>
 	</form:form>
