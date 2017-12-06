@@ -7,6 +7,8 @@ import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.modules.business.businessMarket.dal.dao.BusinessMarketDao;
 import com.thinkgem.jeesite.modules.business.businessMarket.dal.domain.BusinessMarket;
+import com.thinkgem.jeesite.modules.business.businessMarketFloor.srv.BusinessMarketFloorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class BusinessMarketService extends CrudService<BusinessMarketDao, BusinessMarket> {
 
+	@Autowired
+	private BusinessMarketFloorService businessMarketFloorService;
 	
 	public BusinessMarket get(String id) {
 		BusinessMarket businessMarket = super.get(id);
@@ -42,6 +46,9 @@ public class BusinessMarketService extends CrudService<BusinessMarketDao, Busine
 	
 	@Transactional(readOnly = false)
 	public void delete(BusinessMarket businessMarket) {
+		String marketId = businessMarket.getId();
+		//先逻辑删除子级楼层
+		businessMarketFloorService.deleteByMarketId(marketId);
 		super.delete(businessMarket);
 	}
 	

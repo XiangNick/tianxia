@@ -45,6 +45,18 @@
 					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
 			</if>
+			<if test="circleName != null and circleName != ''">
+				AND c.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{circleName}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{circleName}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{circleName},'%')</if>
+			</if>
+			<if test="location != null and location != ''">
+				AND a.location LIKE
+				<if test="dbName == 'oracle'">'%'||#{location}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{location}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{location},'%')</if>
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
