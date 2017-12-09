@@ -55,15 +55,12 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">所属行业：</label>
-				<div class="control-group">
-					<label class="control-label">上级父级编号:</label>
+					<label class="control-label">所属行业:</label>
 					<div class="controls">
-						<sys:treeselect id="categorie" name="businessId" value="${categories.parent.id}" labelName="parent.name" labelValue="${categories.parent.name}"
-										title="父级编号" url="/base/categories/categories/treeData" extId="${categories.id}" cssClass="" allowClear="true"/>
+						<sys:treeselect id="category" name="category.id" value="${shop.category.id}" labelName="category.name" labelValue="${shop.category.name}"
+										title="所属行业" url="/base/categories/categories/treeData" extId="${shop.category.id}" cssClass="" allowClear="true"/>
 					</div>
 			</div>
-		</div>
 		<div class="control-group">
 			<label class="control-label">营业执照：</label>
 			<c:if test="${shop.idPhotos!=null && shop.idPhotos !=''}">

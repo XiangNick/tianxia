@@ -7,7 +7,8 @@
 		a.name AS "name",
 		a.contact_name AS "contactName",
 		a.phone AS "phone",
-		a.business_id AS "businessId",
+		a.business_id AS "category.id",
+		c.name AS "category.name",
 		a.id_photos AS "idPhotos",
 		a.open_time AS "openTime",
 		a.remarks AS "remarks",
@@ -19,6 +20,7 @@
 	</sql>
 	
 	<sql id="shopJoins">
+		LEFT JOIN categories c ON a.business_id = c.id
 	</sql>
     
 	<select id="get" resultType="Shop">
@@ -91,7 +93,7 @@
 			#{name},
 			#{contactName},
 			#{phone},
-			#{businessId},
+			#{category.id},
 			#{idPhotos},
 			#{openTime},
 			#{remarks},
@@ -108,7 +110,7 @@
 			name = #{name},
 			contact_name = #{contactName},
 			phone = #{phone},
-			business_id = #{businessId},
+			business_id = #{category.id},
 			id_photos = #{idPhotos},
 			open_time = #{openTime},
 			remarks = #{remarks},

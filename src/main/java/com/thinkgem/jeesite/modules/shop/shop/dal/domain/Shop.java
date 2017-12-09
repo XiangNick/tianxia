@@ -4,6 +4,7 @@
 package com.thinkgem.jeesite.modules.shop.shop.dal.domain;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.modules.base.categories.dal.domain.Categories;
 import org.hibernate.validator.constraints.Length;
 
 /**
@@ -17,7 +18,7 @@ public class Shop extends DataEntity<Shop> {
 	private String name;		// 商户名称
 	private String contactName;		// 联系人姓名
 	private String phone;		// 电话
-	private String businessId;		// 所属行业
+	private Categories category;		// 所属行业
 	private String idPhotos;		// 以json格式存储的证件照地址
 	private String openTime;		// 营业时间
 	
@@ -55,16 +56,13 @@ public class Shop extends DataEntity<Shop> {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	
-	@Length(min=0, max=64, message="所属行业长度必须介于 0 和 64 之间")
-	public String getBusinessId() {
-		return businessId;
-	}
 
-	public void setBusinessId(String businessId) {
-		this.businessId = businessId;
+	public Categories getCategory() {
+		return category;
 	}
-	
+	public void setCategory(Categories category) {
+		this.category = category;
+	}
 	@Length(min=0, max=2000, message="以json格式存储的证件照地址长度必须介于 0 和 2000 之间")
 	public String getIdPhotos() {
 		return idPhotos;

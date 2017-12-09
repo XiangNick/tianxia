@@ -58,7 +58,7 @@
 					${shop.phone}
 				</td>
 				<td>
-					${shop.businessId}
+					${shop.category.name}
 				</td>
 				<td>
 					${shop.remarks}
