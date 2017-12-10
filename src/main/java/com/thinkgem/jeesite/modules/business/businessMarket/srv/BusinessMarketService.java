@@ -25,7 +25,10 @@ public class BusinessMarketService extends CrudService<BusinessMarketDao, Busine
 
 	@Autowired
 	private BusinessMarketFloorService businessMarketFloorService;
-	
+
+	@Autowired
+	private BusinessMarketDao businessMarketDao;
+
 	public BusinessMarket get(String id) {
 		BusinessMarket businessMarket = super.get(id);
 		return businessMarket;
@@ -51,5 +54,9 @@ public class BusinessMarketService extends CrudService<BusinessMarketDao, Busine
 		businessMarketFloorService.deleteByMarketId(marketId);
 		super.delete(businessMarket);
 	}
-	
+
+	@Transactional(readOnly = false)
+	public List<BusinessMarket> getMarketByCircleId(String circleId) {
+		return businessMarketDao.getMarketByCircleId(circleId);
+	}
 }

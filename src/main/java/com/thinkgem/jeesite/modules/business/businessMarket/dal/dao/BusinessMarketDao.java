@@ -7,6 +7,8 @@ import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.business.businessMarket.dal.domain.BusinessMarket;
 
+import java.util.List;
+
 /**
  * 商场管理DAO接口
  * @author xiangnick
@@ -14,5 +16,6 @@ import com.thinkgem.jeesite.modules.business.businessMarket.dal.domain.BusinessM
  */
 @MyBatisDao
 public interface BusinessMarketDao extends CrudDao<BusinessMarket> {
-	
+
+    List<BusinessMarket> getMarketByCircleId(String circleId);
 }

@@ -69,7 +69,8 @@
 				<shiro:hasPermission name="shop:shop:shop:edit"><td>
     				<a href="${ctx}/shop/shop/shop/form?id=${shop.id}">修改</a>
 					<a href="${ctx}/shop/shop/shop/delete?id=${shop.id}" onclick="return confirmx('确认要删除该商户吗？', this.href)">删除</a>
-				</td></shiro:hasPermission>
+                    <a href="${ctx}/shop/shop/shop/pos?shopId=${shop.id}">POS机列表</a>
+                </td></shiro:hasPermission>
 			</tr>
 		</c:forEach>
 		</tbody>

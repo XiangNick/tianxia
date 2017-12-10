@@ -101,6 +101,10 @@ public class ShopController extends BaseController {
         return "redirect:" + Global.getAdminPath() + "/shop/shop/shop/?repage";
     }
 
+//    @RequestMapping(value = "pos")
+//    public String posList(String shopId){
+//
+//    }
 
     private boolean isNewRecord(Shop shop) {
         return StringUtils.isBlank(shop.getId());

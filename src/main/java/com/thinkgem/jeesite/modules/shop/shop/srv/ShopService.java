@@ -3,13 +3,21 @@
  */
 package com.thinkgem.jeesite.modules.shop.shop.srv;
 
+import com.alibaba.fastjson.JSON;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.base.bean.FileUploadResult;
+import com.thinkgem.jeesite.modules.base.constant.FileUploadConstant;
+import com.thinkgem.jeesite.modules.shop.shop.bean.UploadFileRecord;
 import com.thinkgem.jeesite.modules.shop.shop.dal.dao.ShopDao;
 import com.thinkgem.jeesite.modules.shop.shop.dal.domain.Shop;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 /**
@@ -42,5 +50,107 @@ public class ShopService extends CrudService<ShopDao, Shop> {
 	public void delete(Shop shop) {
 		super.delete(shop);
 	}
-	
+
+	@Transactional(readOnly = false)
+	public FileUploadResult process(UploadFileRecord record,Shop shop, MultipartFile license, MultipartFile idCardFront, MultipartFile idCardContrary) {
+		FileUploadResult result = new FileUploadResult();
+		if (StringUtils.isNotBlank(license.getOriginalFilename())) {
+			//传了证件图片
+			result = validatePic(license);
+			if (!result.isSuccess()) {
+				return result;
+			} else {
+				//校验成功，上传证件图片
+				String licenseUrl = uploadFile(license);
+				//更新证件的url
+				record.setLicense(licenseUrl);
+			}
+		}
+		if (StringUtils.isNotBlank(idCardFront.getOriginalFilename())) {
+			//传了身份证正面图片
+			result = validatePic(idCardFront);
+			if (!result.isSuccess()) {
+				return result;
+			} else {
+				//校验成功，上传身份证正面图片
+				String idCardFrontUrl = uploadFile(idCardFront);
+				//更新身份证正面的url
+				record.setIdCardFront(idCardFrontUrl);
+			}
+		}
+		if (StringUtils.isNotBlank(idCardContrary.getOriginalFilename())) {
+			//传了身份证反面图片
+			result = validatePic(idCardContrary);
+			if (!result.isSuccess()) {
+				return result;
+			} else {
+				//校验成功，上传身份证反面图片
+				String idCardContraryUrl = uploadFile(idCardContrary);
+				//更新身份证反面的url
+				record.setIdCardContrary(idCardContraryUrl);
+			}
+		}
+		String idPhotos = JSON.toJSONString(record);
+		shop.setIdPhotos(idPhotos);
+		save(shop);
+		result.setSuccess(true);
+		result.setMsg("保存商户成功");
+		return result;
+	}
+
+	private FileUploadResult validatePic(MultipartFile file) {
+		FileUploadResult result = new FileUploadResult();
+		boolean flag = false;
+		// 校验后缀
+		String oname = file.getOriginalFilename();
+		for (String type : FileUploadConstant.TYPE) {
+			// 如果后缀是要求的格式结尾，标志位设置为true，跳出循环
+			if (StringUtils.endsWithIgnoreCase(oname, type)) {
+				flag = true;
+				break;
+			}
+		}
+		// 如果后缀都不符合，直接返回，后面不用校验了
+		if (!flag){
+			result.setMsg("请上传图片格式的文件！");
+			return result;
+		}
+		// 重置标志位，开始校验是否为图片
+		flag = false;
+		// 图片内容校验
+		try{
+			BufferedImage image = ImageIO.read(file.getInputStream());
+			if (image == null) {
+				result.setMsg(file.getOriginalFilename() + "，不是图片！请上传图片！");
+				return result;
+			} else {
+				if (image.getHeight() > FileUploadConstant.MAXHEIGHT) {
+					result.setMsg(file.getOriginalFilename() + "的高度超过:" + FileUploadConstant.MAXWEIGHT + "的限制！");
+					return result;
+				}
+				if (image.getWidth() > FileUploadConstant.MAXWEIGHT) {
+					result.setMsg(file.getOriginalFilename() + "的宽度超过:" + FileUploadConstant.MAXWEIGHT + "的限制！");
+					return result;
+				}
+				flag = true;
+			}
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		result.setMsg("上传图片成功");
+		result.setSuccess(flag);
+		return result;
+	}
+
+	/**
+	 * TODO：上传图片到OSS
+	 * @param uploadFile
+	 * @return
+	 */
+	private String uploadFile(MultipartFile uploadFile) {
+		if(uploadFile!=null&&StringUtils.isNotBlank(uploadFile.getOriginalFilename())){
+			return "https://aliyun.oss.com/" + uploadFile.getOriginalFilename();
+		}
+		return "";
+	}
 }

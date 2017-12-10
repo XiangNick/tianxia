@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -122,5 +123,13 @@ public class BusinessMarketController extends BaseController {
 		return businessMarketFloorService.get(floorId);
 	}
 
+	@RequestMapping(value = "getMarketByCircleId",method = RequestMethod.POST)
+	@ResponseBody
+	public List<BusinessMarket> getMarketByCircleId(String circleId){
+		if(StringUtils.isNotBlank(circleId)){
+			return businessMarketService.getMarketByCircleId(circleId);
+		}
+		return new ArrayList<BusinessMarket>();
+	}
 
 }

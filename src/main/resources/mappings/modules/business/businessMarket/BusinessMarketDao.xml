@@ -140,5 +140,12 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-	
+
+	<select id="getMarketByCircleId" resultType="com.thinkgem.jeesite.modules.business.businessMarket.dal.domain.BusinessMarket">
+		  select
+		  id,name
+		  from
+		  business_market
+		  where circle_id = #{circleId}
+	</select>
 </mapper>
