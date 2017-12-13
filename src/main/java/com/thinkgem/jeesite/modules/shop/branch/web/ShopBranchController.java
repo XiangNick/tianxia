@@ -88,6 +88,25 @@ public class ShopBranchController extends BaseController {
         if (!beanValidator(model, shopBranch)) {
             return form(shopBranch, model);
         }
+        //处理数据
+        if(shopBranch!=null){
+            String side = shopBranch.getSide();
+            switch (side){
+                case "1":{
+                    shopBranch.setMarketFloor(null);
+                    break;
+                }
+                case "2":{
+                    shopBranch.setCircle(null);
+                    shopBranch.setMarket(null);
+                    shopBranch.setMarketFloor(null);
+                    break;
+                }
+                default:{
+                    break;
+                }
+            }
+        }
         shopBranchService.save(shopBranch);
         addMessage(redirectAttributes, "保存门店成功");
         return "redirect:" + Global.getAdminPath() + "/shop/branch/shopBranch/?repage";

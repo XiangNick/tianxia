@@ -6,6 +6,41 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
+            //数据初始化
+            var side = '${shopBranch.side}';
+            switch(side){
+                case '0':{
+                    $("#circle").attr("disabled",false);
+                    $("#circleDiv").show();
+                    $("#market").attr("disabled",false);
+                    $("#marketDiv").show();
+                    $("#marketFloor").attr("disabled",false);
+                    $("#marketFloorDiv").show();
+					break;
+                }
+                case '1':{
+                    $("#marketFloor").attr("disabled",true);
+                    $("#marketFloorDiv").hide();
+                    $("#circle").attr("disabled",false);
+                    $("#circleDiv").show();
+                    $("#market").attr("disabled",false);
+                    $("#marketDiv").show();
+                    break;
+                }
+                case '2':{
+                    //选择是的无商场
+                    $("#circle").attr("disabled",true);
+                    $("#circleDiv").hide();
+                    $("#market").attr("disabled",true);
+                    $("#marketDiv").hide();
+                    $("#marketFloor").attr("disabled",true);
+                    $("#marketFloorDiv").hide();
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
 			//$("#name").focus();
 			$("#inputForm").validate({
 				submitHandler: function(form){
@@ -25,22 +60,29 @@
 
 			$("#side").change(function(){
 			    var side = $(this).val();
+			    console.log(side);
 				if(side == 2){
 					//选择是的无商场
 					$("#circle").attr("disabled",true);
-					$("#circleDiv").attr("disabled",true);
+					$("#circleDiv").hide();
 					$("#market").attr("disabled",true);
-					$("#marketDiv").attr("disabled",true);
+					$("#marketDiv").hide();
 					$("#marketFloor").attr("disabled",true);
-					$("#marketFloorDiv").attr("disabled",true);
+					$("#marketFloorDiv").hide();
 				}else if(side == 1){
+				    //商场周边
                     $("#marketFloor").attr("disabled",true);
-                    $("#marketFloorDiv").attr("disabled",true);
+                    $("#marketFloorDiv").hide();
+                    $("#circle").attr("disabled",false);
                     $("#circleDiv").show();
+                    $("#market").attr("disabled",false);
                     $("#marketDiv").show();
                 }else{
+                    $("#circle").attr("disabled",false);
                     $("#circleDiv").show();
+                    $("#market").attr("disabled",false);
                     $("#marketDiv").show();
+                    $("#marketFloor").attr("disabled",false);
                     $("#marketFloorDiv").show();
 				}
 			});
