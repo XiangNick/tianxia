@@ -65,12 +65,6 @@ public abstract class BaseService {
 //						else if (Role.DATA_SCOPE_OFFICE.equals(r.getDataScope())){
 //							sqlString.append(" OR " + oa + ".id = '" + user.getOffice().getId() + "'");
 //						}
-						else if (Role.DATA_SCOPE_CUSTOM.equals(r.getDataScope())){
-							String officeIds =  StringUtils.join(r.getOfficeIdList(), "','");
-							if (StringUtils.isNotEmpty(officeIds)){
-								sqlString.append(" OR " + oa + ".id IN ('" + officeIds + "')");
-							}
-						}
 						//else if (Role.DATA_SCOPE_SELF.equals(r.getDataScope())){
 						dataScope.add(r.getDataScope());
 					}

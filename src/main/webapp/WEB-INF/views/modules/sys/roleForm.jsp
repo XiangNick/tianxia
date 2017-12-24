@@ -23,11 +23,6 @@
 						ids.push(nodes[i].id);
 					}
 					$("#menuIds").val(ids);
-					var ids2 = [], nodes2 = tree2.getCheckedNodes(true);
-					for(var i=0; i<nodes2.length; i++) {
-						ids2.push(nodes2[i].id);
-					}
-					$("#officeIds").val(ids2);
 					loading('正在提交，请稍等...');
 					form.submit();
 				},
@@ -64,36 +59,7 @@
 			}
 			// 默认展开全部节点
 			tree.expandAll(true);
-			
-			// 用户-机构
-			var zNodes2=[
-					<c:forEach items="${officeList}" var="office">{id:"${office.id}", pId:"${not empty office.parent?office.parent.id:0}", name:"${office.name}"},
-		            </c:forEach>];
-			// 初始化树结构
-			var tree2 = $.fn.zTree.init($("#officeTree"), setting, zNodes2);
-			// 不选择父节点
-			tree2.setting.check.chkboxType = { "Y" : "ps", "N" : "s" };
-			// 默认选择节点
-			var ids2 = "${role.officeIds}".split(",");
-			for(var i=0; i<ids2.length; i++) {
-				var node = tree2.getNodeByParam("id", ids2[i]);
-				try{tree2.checkNode(node, true, false);}catch(e){}
-			}
-			// 默认展开全部节点
-			tree2.expandAll(true);
-			// 刷新（显示/隐藏）机构
-			refreshOfficeTree();
-			$("#dataScope").change(function(){
-				refreshOfficeTree();
-			});
 		});
-		function refreshOfficeTree(){
-			if($("#dataScope").val()==9){
-				$("#officeTree").show();
-			}else{
-				$("#officeTree").hide();
-			}
-		}
 	</script>
 </head>
 <body>
@@ -104,13 +70,6 @@
 	<form:form id="inputForm" modelAttribute="role" action="${ctx}/sys/role/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>
-		<div class="control-group">
-			<label class="control-label">归属机构:</label>
-			<div class="controls">
-                <sys:treeselect id="office" name="office.id" value="${role.office.id}" labelName="office.name" labelValue="${role.office.name}"
-					title="机构" url="/sys/office/treeData" cssClass="required"/>
-			</div>
-		</div>
 		<div class="control-group">
 			<label class="control-label">角色名称:</label>
 			<div class="controls">
@@ -174,8 +133,6 @@
 			<div class="controls">
 				<div id="menuTree" class="ztree" style="margin-top:3px;float:left;"></div>
 				<form:hidden path="menuIds"/>
-				<div id="officeTree" class="ztree" style="margin-left:100px;margin-top:3px;float:left;"></div>
-				<form:hidden path="officeIds"/>
 			</div>
 		</div>
 		<div class="control-group">

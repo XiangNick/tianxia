@@ -12,7 +12,6 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.sys.entity.Role;
 import com.thinkgem.jeesite.modules.sys.entity.User;
-import com.thinkgem.jeesite.modules.sys.service.OfficeService;
 import com.thinkgem.jeesite.modules.sys.service.SystemService;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -41,9 +40,6 @@ public class RoleController extends BaseController {
 	@Autowired
 	private SystemService systemService;
 	
-	@Autowired
-	private OfficeService officeService;
-	
 	@ModelAttribute("role")
 	public Role get(@RequestParam(required=false) String id) {
 		if (StringUtils.isNotBlank(id)){
@@ -64,12 +60,8 @@ public class RoleController extends BaseController {
 	@RequiresPermissions("sys:role:view")
 	@RequestMapping(value = "form")
 	public String form(Role role, Model model) {
-		if (role.getOffice()==null){
-			role.setOffice(officeService.getFirst());
-		}
 		model.addAttribute("role", role);
 		model.addAttribute("menuList", systemService.findAllMenu());
-		model.addAttribute("officeList", officeService.findAll());
 		return "modules/sys/roleForm";
 	}
 	
@@ -149,7 +141,6 @@ public class RoleController extends BaseController {
 		model.addAttribute("role", role);
 		model.addAttribute("userList", userList);
 		model.addAttribute("selectIds", Collections3.extractToString(userList, "name", ","));
-		model.addAttribute("officeList", officeService.findAll());
 		return "modules/sys/selectUserToRole";
 	}
 	

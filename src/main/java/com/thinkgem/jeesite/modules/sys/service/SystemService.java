@@ -230,11 +230,6 @@ public class SystemService extends BaseService {
 		if (role.getMenuList().size() > 0){
 			roleDao.insertRoleMenu(role);
 		}
-		// 更新角色与部门关联
-		roleDao.deleteRoleOffice(role);
-		if (role.getOfficeList().size() > 0){
-			roleDao.insertRoleOffice(role);
-		}
 		// 清除用户角色缓存
 		UserUtils.removeCache(UserUtils.CACHE_ROLE_LIST);
 	}

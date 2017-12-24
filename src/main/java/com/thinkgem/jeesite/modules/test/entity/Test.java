@@ -3,15 +3,11 @@
  */
 package com.thinkgem.jeesite.modules.test.entity;
 
-import java.util.Date;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.thinkgem.jeesite.common.persistence.DataEntity;
 import org.hibernate.validator.constraints.Length;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.thinkgem.jeesite.common.persistence.DataEntity;
-import com.thinkgem.jeesite.modules.sys.entity.Office;
+import java.util.Date;
 
 /**
  * 测试Entity
@@ -21,7 +17,6 @@ import com.thinkgem.jeesite.modules.sys.entity.Office;
 public class Test extends DataEntity<Test> {
 	
 	private static final long serialVersionUID = 1L;
-	private Office office;	// 归属部门
 	private String loginName;// 登录名
 	private String name; 	// 名称
 
@@ -33,15 +28,6 @@ public class Test extends DataEntity<Test> {
 		super(id);
 	}
 
-	@JsonSerialize(using = ToStringSerializer.class)
-	public Office getOffice() {
-		return office;
-	}
-
-	public void setOffice(Office office) {
-		this.office = office;
-	}
-	
 	public String getLoginName() {
 		return loginName;
 	}

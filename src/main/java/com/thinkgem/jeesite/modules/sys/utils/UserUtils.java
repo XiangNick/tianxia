@@ -28,7 +28,6 @@ public class UserUtils {
 	private static RoleDao roleDao = SpringContextHolder.getBean(RoleDao.class);
 	private static MenuDao menuDao = SpringContextHolder.getBean(MenuDao.class);
 	private static AreaDao areaDao = SpringContextHolder.getBean(AreaDao.class);
-	private static OfficeDao officeDao = SpringContextHolder.getBean(OfficeDao.class);
 
 	public static final String USER_CACHE = "userCache";
 	public static final String USER_CACHE_ID_ = "id_";
@@ -173,41 +172,6 @@ public class UserUtils {
 		}
 		return areaList;
 	}
-	
-	/**
-	 * 获取当前用户有权限访问的部门
-	 * @return
-	 */
-	public static List<Office> getOfficeList(){
-		@SuppressWarnings("unchecked")
-		List<Office> officeList = (List<Office>)getCache(CACHE_OFFICE_LIST);
-		if (officeList == null){
-			User user = getUser();
-			if (user.isAdmin()){
-				officeList = officeDao.findAllList(new Office());
-			}else{
-				Office office = new Office();
-				office.getSqlMap().put("dsf", BaseService.dataScopeFilter(user, "a", ""));
-				officeList = officeDao.findList(office);
-			}
-			putCache(CACHE_OFFICE_LIST, officeList);
-		}
-		return officeList;
-	}
-
-	/**
-	 * 获取当前用户有权限访问的部门
-	 * @return
-	 */
-	public static List<Office> getOfficeAllList(){
-		@SuppressWarnings("unchecked")
-		List<Office> officeList = (List<Office>)getCache(CACHE_OFFICE_ALL_LIST);
-		if (officeList == null){
-			officeList = officeDao.findAllList(new Office());
-		}
-		return officeList;
-	}
-	
 	/**
 	 * 获取授权主要对象
 	 */
