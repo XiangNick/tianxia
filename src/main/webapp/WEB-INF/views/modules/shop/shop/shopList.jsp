@@ -6,13 +6,16 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			
+
 		});
 		function page(n,s){
 			$("#pageNo").val(n);
 			$("#pageSize").val(s);
 			$("#searchForm").submit();
         	return false;
+        }
+        function posView(shopId,shopName){
+			window.location.href = '${ctx}/shop/pos/pos/posList?shopId='+shopId+'&shopName='+shopName;
         }
 	</script>
 </head>
@@ -69,7 +72,7 @@
 				<shiro:hasPermission name="shop:shop:shop:edit"><td>
     				<a href="${ctx}/shop/shop/shop/form?id=${shop.id}">修改</a>
 					<a href="${ctx}/shop/shop/shop/delete?id=${shop.id}" onclick="return confirmx('确认要删除该商户吗？', this.href)">删除</a>
-                    <a href="${ctx}/shop/shop/shop/pos?shopId=${shop.id}">POS机列表</a>
+                    <a href="javascript:void(0);" onclick="posView('${shop.id}','${shop.name}')">POS机列表</a>
                 </td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

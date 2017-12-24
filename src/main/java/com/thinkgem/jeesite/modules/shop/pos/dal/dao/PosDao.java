@@ -1,21 +1,21 @@
 /**
  * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
  */
-package com.thinkgem.jeesite.modules.shop.branch.dal.dao;
+package com.thinkgem.jeesite.modules.shop.pos.dal.dao;
 
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
-import com.thinkgem.jeesite.modules.shop.branch.dal.domain.ShopBranch;
+import com.thinkgem.jeesite.modules.shop.pos.dal.domain.Pos;
 
 import java.util.List;
 
 /**
- * 门店管理DAO接口
+ * pos机管理DAO接口
  * @author xiangnick
- * @version 2017-12-10
+ * @version 2017-12-24
  */
 @MyBatisDao
-public interface ShopBranchDao extends CrudDao<ShopBranch> {
+public interface PosDao extends CrudDao<Pos> {
 
-    List<ShopBranch> getListByShopId(String shopId);
+    List<Pos> findListByShopId(String shopId);
 }

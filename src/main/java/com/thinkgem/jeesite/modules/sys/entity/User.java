@@ -28,11 +28,9 @@ public class User extends DataEntity<User> {
 	private String password;// 密码
 	private String name;	// 姓名
 	private String mobile;	// 手机
-	private String userType;// 用户类型
 	private String loginIp;	// 最后登陆IP
 	private Date loginDate;	// 最后登陆日期
 	private String loginFlag;	// 是否允许登陆
-	private String photo;	// 头像
 
 	private String oldLoginName;// 原登录名
 	private String newPassword;	// 新密码
@@ -63,13 +61,6 @@ public class User extends DataEntity<User> {
 		this.role = role;
 	}
 	
-	public String getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
 
 	public String getLoginFlag() {
 		return loginFlag;
@@ -130,16 +121,6 @@ public class User extends DataEntity<User> {
 		return remarks;
 	}
 	
-	@Length(min=0, max=100, message="用户类型长度必须介于 1 和 100 之间")
-	@ExcelField(title="用户类型", align=2, sort=80, dictType="sys_user_type")
-	public String getUserType() {
-		return userType;
-	}
-
-	public void setUserType(String userType) {
-		this.userType = userType;
-	}
-
 	@ExcelField(title="创建时间", type=0, align=1, sort=90)
 	public Date getCreateDate() {
 		return createDate;

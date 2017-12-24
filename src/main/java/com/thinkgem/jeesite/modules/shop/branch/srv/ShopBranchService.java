@@ -7,6 +7,7 @@ import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.modules.shop.branch.dal.dao.ShopBranchDao;
 import com.thinkgem.jeesite.modules.shop.branch.dal.domain.ShopBranch;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,9 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 public class ShopBranchService extends CrudService<ShopBranchDao, ShopBranch> {
+
+	@Autowired
+	private ShopBranchDao shopBranchDao;
 
 	public ShopBranch get(String id) {
 		return super.get(id);
@@ -42,5 +46,8 @@ public class ShopBranchService extends CrudService<ShopBranchDao, ShopBranch> {
 	public void delete(ShopBranch shopBranch) {
 		super.delete(shopBranch);
 	}
-	
+
+	public List<ShopBranch> getListByShopId(String shopId) {
+		return shopBranchDao.getListByShopId(shopId);
+	}
 }

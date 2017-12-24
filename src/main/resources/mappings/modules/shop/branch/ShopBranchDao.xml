@@ -31,7 +31,17 @@
 		<include refid="shopBranchJoins"/>
 		WHERE a.id = #{id}
 	</select>
-	
+
+	<select id="getListByShopId" resultType="ShopBranch">
+		SELECT
+		<include refid="shopBranchColumns"/>
+		FROM shop_branch a
+		<include refid="shopBranchJoins"/>
+		<where>
+			a.shop_id = #{shopId}
+		</where>
+	</select>
+
 	<select id="findList" resultType="ShopBranch">
 		SELECT 
 			<include refid="shopBranchColumns"/>

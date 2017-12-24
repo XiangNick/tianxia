@@ -40,13 +40,7 @@
 	<form:form id="inputForm" modelAttribute="user" action="${ctx}/sys/user/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>
-		<div class="control-group">
-			<label class="control-label">头像:</label>
-			<div class="controls">
-				<form:hidden id="nameImage" path="photo" htmlEscape="false" maxlength="255" class="input-xlarge"/>
-				<sys:ckfinder input="nameImage" type="images" uploadPath="/photo" selectMultiple="false" maxWidth="100" maxHeight="100"/>
-			</div>
-		</div>
+
 		<div class="control-group">
 			<label class="control-label">姓名:</label>
 			<div class="controls">
@@ -90,15 +84,6 @@
 					<form:options items="${fns:getDictList('yes_no')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 				<span class="help-inline"><font color="red">*</font> “是”代表此账号允许登录，“否”则表示此账号不允许登录</span>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">用户类型:</label>
-			<div class="controls">
-				<form:select path="userType" class="input-xlarge">
-					<form:option value="" label="请选择"/>
-					<form:options items="${fns:getDictList('sys_user_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
 			</div>
 		</div>
 		<div class="control-group">

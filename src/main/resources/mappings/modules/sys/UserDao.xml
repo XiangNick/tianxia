@@ -64,12 +64,10 @@
     	a.password,
 		a.name,
 		a.mobile,
-		a.user_type,
 		a.login_ip,
 		a.login_date,
 		a.remarks,
 		a.login_flag,
-		a.photo,
 		a.create_by AS "createBy.id",
 		a.create_date,
 		a.update_by AS "updateBy.id",
@@ -171,14 +169,12 @@
 			password, 
 			name,
 			mobile,
-			user_type, 
-			create_by, 
+			create_by,
 			create_date, 
 			update_by, 
 			update_date, 
 			remarks, 
 			login_flag, 
-			photo, 
 			del_flag
 		) VALUES (
 			#{id}, 
@@ -186,14 +182,12 @@
 			#{password}, 
 			#{name},
 			#{mobile},
-			#{userType}, 
-			#{createBy.id}, 
+			#{createBy.id},
 			#{createDate}, 
 			#{updateBy.id}, 
 			#{updateDate}, 
 			#{remarks}, 
 			#{loginFlag}, 
-			#{photo}, 
 			#{delFlag}
 		)
 	</insert>
@@ -205,12 +199,10 @@
 			password = #{password}, 
 			name = #{name},
 			mobile = #{mobile},
-			user_type = #{userType}, 
-			update_by = #{updateBy.id}, 
+			update_by = #{updateBy.id},
 			update_date = #{updateDate}, 
 			remarks = #{remarks},
-			login_flag = #{loginFlag},
-			photo = #{photo}
+			login_flag = #{loginFlag}
 		WHERE id = #{id}
 	</update>
 	
@@ -233,8 +225,7 @@
 			mobile = #{mobile},
 			update_by = #{updateBy.id}, 
 			update_date = #{updateDate}, 
-			remarks = #{remarks},
-			photo = #{photo}
+			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
 	
