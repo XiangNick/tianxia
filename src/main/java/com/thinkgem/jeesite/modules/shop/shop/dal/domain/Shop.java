@@ -21,6 +21,7 @@ public class Shop extends DataEntity<Shop> {
 	private Categories category;		// 所属行业
 	private String idPhotos;		// 以json格式存储的证件照地址
 	private String openTime;		// 营业时间
+	private String password; //商户登录密码
 	
 	public Shop() {
 		super();
@@ -28,6 +29,14 @@ public class Shop extends DataEntity<Shop> {
 
 	public Shop(String id){
 		super(id);
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@Length(min=1, max=200, message="商户名称长度必须介于 1 和 200 之间")

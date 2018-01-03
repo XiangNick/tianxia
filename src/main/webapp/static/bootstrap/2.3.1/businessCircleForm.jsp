@@ -36,7 +36,7 @@
 //                $("#city").get(0).selectedIndex=1;
                 var parentId = $(this).val();
                 $.ajax({
-                    url: "/a/business/businesscircle/businessCircle/linkage",
+                    url: "${ctx}/business/businesscircle/businessCircle/linkage",
                     type: "POST",
                     data: {"parentId": parentId},
                     success: function (data) {
@@ -58,7 +58,7 @@
 //                $("#region").get(0).selectedIndex=1;
                 var parentId = $(this).val();
                 $.ajax({
-                    url: "/a/business/businesscircle/businessCircle/linkage",
+                    url: "${ctx}/business/businesscircle/businessCircle/linkage",
                     type: "POST",
                     data: {"parentId": parentId},
                     success: function (data) {

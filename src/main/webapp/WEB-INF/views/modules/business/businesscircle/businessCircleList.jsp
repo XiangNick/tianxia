@@ -16,7 +16,7 @@
                 $(".select2-chosen")[2].innerText = '---请选择---';
                 var parentId = $(this).val();
                 $.ajax({
-                    url: "/a/business/businesscircle/businessCircle/linkage",
+                    url: "${ctx}/business/businesscircle/businessCircle/linkage",
                     type: "POST",
                     data: {"parentId": parentId},
                     success: function (data) {
@@ -37,7 +37,7 @@
                 $(".select2-chosen")[2].innerText = '---请选择---';
                 var parentId = $(this).val();
                 $.ajax({
-                    url: "/a/business/businesscircle/businessCircle/linkage",
+                    url: "${ctx}/business/businesscircle/businessCircle/linkage",
                     type: "POST",
                     data: {"parentId": parentId},
                     success: function (data) {

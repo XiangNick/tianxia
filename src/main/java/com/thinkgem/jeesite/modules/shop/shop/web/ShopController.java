@@ -109,4 +109,5 @@ public class ShopController extends BaseController {
     private boolean isNewRecord(Shop shop) {
         return StringUtils.isBlank(shop.getId());
     }
+
 }

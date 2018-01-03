@@ -12,12 +12,16 @@ import com.thinkgem.jeesite.modules.base.constant.FileUploadConstant;
 import com.thinkgem.jeesite.modules.shop.shop.bean.UploadFileRecord;
 import com.thinkgem.jeesite.modules.shop.shop.dal.dao.ShopDao;
 import com.thinkgem.jeesite.modules.shop.shop.dal.domain.Shop;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.security.MessageDigest;
 import java.util.List;
 
 /**
@@ -28,6 +32,8 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 public class ShopService extends CrudService<ShopDao, Shop> {
+
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	public Shop get(String id) {
 		return super.get(id);
@@ -43,6 +49,7 @@ public class ShopService extends CrudService<ShopDao, Shop> {
 	
 	@Transactional(readOnly = false)
 	public void save(Shop shop) {
+
 		super.save(shop);
 	}
 	
@@ -92,10 +99,29 @@ public class ShopService extends CrudService<ShopDao, Shop> {
 		}
 		String idPhotos = JSON.toJSONString(record);
 		shop.setIdPhotos(idPhotos);
+		//新纪录才设置初始密码
+		if(isNewRecord(shop)){
+			shop.setPassword(encryptMD5("888888"));
+		}
 		save(shop);
 		result.setSuccess(true);
 		result.setMsg("保存商户成功");
 		return result;
+	}
+
+	public  String encryptMD5(String str){
+		try {
+			MessageDigest md5 = MessageDigest.getInstance("MD5");
+			BASE64Encoder base64Encoder = new BASE64Encoder();
+			return base64Encoder.encode(md5.digest(str.getBytes("utf-8")));
+		}catch (Exception e){
+			logger.error("MD5加密失败",e);
+		}
+		return null;
+	}
+
+	private boolean isNewRecord(Shop shop) {
+		return StringUtils.isBlank(shop.getId());
 	}
 
 	private FileUploadResult validatePic(MultipartFile file) {

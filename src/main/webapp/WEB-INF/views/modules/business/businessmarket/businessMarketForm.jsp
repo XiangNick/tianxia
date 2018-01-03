@@ -26,7 +26,7 @@
             $("#circleId").change(function(){
                 var circleId = $(this).val();
                 $.ajax({
-                    url:"${pageContext.request.contextPath}/a/business/businesscircle/businessCircle/getCirclePCRByCircleId",
+                    url:"${ctx}/business/businesscircle/businessCircle/getCirclePCRByCircleId",
                     type:"POST",
                     data:{"circleId":circleId},
                     success:function(data){

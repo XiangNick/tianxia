@@ -74,13 +74,13 @@ public class BusinessMarketController extends BaseController {
 		BusinessMarketFloor floor = new BusinessMarketFloor();
 		floor.setId(floorId);
 		businessMarketFloorService.delete(floor);
-		return "redirect:/a/business/businessmarket/businessMarket/list";
+		return "redirect:"+Global.getAdminPath()+"/business/businessmarket/businessMarket/list";
 	}
 
 	@RequestMapping(value = "updateFloorByCondition",method = RequestMethod.POST)
 	public String updateFloorByCondition(BusinessMarketFloor businessMarketFloor){
 		businessMarketFloorService.updateFloorByCondition(businessMarketFloor);
-		return "redirect:/a/business/businessmarket/businessMarket/list";
+		return "redirect:"+Global.getAdminPath()+"/business/businessmarket/businessMarket/list";
 	}
 
 	@RequiresPermissions("business:businessmarket:businessMarket:view")

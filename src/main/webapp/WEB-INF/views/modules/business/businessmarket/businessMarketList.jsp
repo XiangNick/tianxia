@@ -36,7 +36,7 @@
         }
 
         function addFloor(marketId) {
-            var html = "<form id='saveForm'  action='/a/business/businessmarket/businessMarket/saveMarketFloor' method='post'><input type='hidden' name='marketId' value='" + marketId + "'/> <br/>楼层号：<input type='text' id='addFloor' name='floor'/>&nbsp;[必填]<br/>楼层名：<input type='text' id='addName' name='name'/>&nbsp;[必填]<br/>该楼层类别：<input type='text' id='addCategory' name='category'/><br/>备注信息：<textarea id='addRemarks' name='remarks'></textarea></form>";
+            var html = "<form id='saveForm'  action='${ctx}/business/businessmarket/businessMarket/saveMarketFloor' method='post'><input type='hidden' name='marketId' value='" + marketId + "'/> <br/>楼层号：<input type='text' id='addFloor' name='floor'/>&nbsp;[必填]<br/>楼层名：<input type='text' id='addName' name='name'/>&nbsp;[必填]<br/>该楼层类别：<input type='text' id='addCategory' name='category'/><br/>备注信息：<textarea id='addRemarks' name='remarks'></textarea></form>";
             $("#modal-body").html(html);
             $("#floorFooter").html("<button class=\"btn\" data-dismiss=\"modal\" aria-hidden=\"true\">关闭</button><button class=\"btn btn-primary\" onclick=\"saveFloor()\">新增</button>");
         }
@@ -61,7 +61,7 @@
 
         function listFloor(marketId) {
             $.ajax({
-                url: "/a/business/businessmarket/businessMarket/getFloorListByMarketId",
+                url: "${ctx}/business/businessmarket/businessMarket/getFloorListByMarketId",
                 type: "get",
                 data: {"marketId": marketId},
                 success: function (data) {
@@ -80,11 +80,11 @@
 
         function editFloor(id) {
             $.ajax({
-                url: "/a/business/businessmarket/businessMarket/getFloorById",
+                url: "${ctx}/business/businessmarket/businessMarket/getFloorById",
                 data: {"floorId": id},
                 type: "get",
                 success: function (data) {
-                    var html = "<form id='updateForm' action='/a/business/businessmarket/businessMarket/updateFloorByCondition' method='post'><input type='hidden' name='id' value='" + data.id + "'/><br/>楼层号：<input type='text' id='upFloor' name='floor' value='" + data.floor + "'/><br/>楼层名：<input type='text' id='upName' name='name' value='" + data.name + "'/><br/>该楼层类别：<input type='text' name='category' value='" + data.category + "'/><br/>备注信息：<textarea name='remarks'>" + data.remarks + "</textarea></form>";
+                    var html = "<form id='updateForm' action='${ctx}/business/businessmarket/businessMarket/updateFloorByCondition' method='post'><input type='hidden' name='id' value='" + data.id + "'/><br/>楼层号：<input type='text' id='upFloor' name='floor' value='" + data.floor + "'/><br/>楼层名：<input type='text' id='upName' name='name' value='" + data.name + "'/><br/>该楼层类别：<input type='text' name='category' value='" + data.category + "'/><br/>备注信息：<textarea name='remarks'>" + data.remarks + "</textarea></form>";
                     $("#modal-body").html(html);
                     $("#floorFooter").html("<button class=\"btn\" data-dismiss=\"modal\" aria-hidden=\"true\">关闭</button><button class=\"btn btn-primary\" onclick=\"saveUpdateFloor()\">保存修改</button>");
                 }
@@ -95,7 +95,7 @@
             var r = confirm("确定要删除吗?");
             if (r) {
                 $.ajax({
-                    url: "/a/business/businessmarket/businessMarket/delFloor",
+                    url: "${ctx}/business/businessmarket/businessMarket/delFloor",
                     data: {"floorId": id},
                     type: "get",
                     success: function (data) {

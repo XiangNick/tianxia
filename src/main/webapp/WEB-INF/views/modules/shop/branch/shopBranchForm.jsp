@@ -104,7 +104,7 @@
                 $("#marketFloor").find("option").remove();
                 $("#marketFloor").append(todoStr);
                 $.ajax({
-                    url: "/a/business/businessmarket/businessMarket/getMarketByCircleId",
+                    url: "${ctx}/business/businessmarket/businessMarket/getMarketByCircleId",
                     type: "POST",
                     data: {"circleId": circleId},
                     success: function (data) {
@@ -132,7 +132,7 @@
                     }
                     var marketId = $(this).val();
                     $.ajax({
-                        url: "/a/business/businessmarket/businessMarket/getFloorListByMarketId",
+                        url: "${ctx}/business/businessmarket/businessMarket/getFloorListByMarketId",
                         type: "GET",
                         data: {"marketId": marketId},
                         success: function (data) {
