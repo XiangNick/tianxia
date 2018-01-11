@@ -6,22 +6,26 @@ package com.thinkgem.jeesite.modules.shop.shop.srv;
 import com.alibaba.fastjson.JSON;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.common.utils.IdGen;
+import com.thinkgem.jeesite.common.utils.MD5Util;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.base.bean.FileUploadResult;
 import com.thinkgem.jeesite.modules.base.constant.FileUploadConstant;
 import com.thinkgem.jeesite.modules.shop.shop.bean.UploadFileRecord;
 import com.thinkgem.jeesite.modules.shop.shop.dal.dao.ShopDao;
+import com.thinkgem.jeesite.modules.shop.shop.dal.dao.ShopUserDao;
 import com.thinkgem.jeesite.modules.shop.shop.dal.domain.Shop;
+import com.thinkgem.jeesite.modules.shop.shop.dal.domain.ShopUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.security.MessageDigest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,6 +36,11 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 public class ShopService extends CrudService<ShopDao, Shop> {
+
+	private static final String NOURMAL_SHOP_ROLE = "2";
+
+	@Autowired
+	private ShopUserDao shopUserDao;
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -49,7 +58,6 @@ public class ShopService extends CrudService<ShopDao, Shop> {
 	
 	@Transactional(readOnly = false)
 	public void save(Shop shop) {
-
 		super.save(shop);
 	}
 	
@@ -99,25 +107,26 @@ public class ShopService extends CrudService<ShopDao, Shop> {
 		}
 		String idPhotos = JSON.toJSONString(record);
 		shop.setIdPhotos(idPhotos);
-		//新纪录才设置初始密码
-		if(isNewRecord(shop)){
-			shop.setPassword(encryptMD5("888888"));
+		//新纪录才在shopUser表新增一条登录账户
+		if(isNewRecord(shop)&&StringUtils.isNotBlank(shop.getPhone())){
+			ShopUser shopUser = new ShopUser();
+			shopUser.setId(IdGen.uuid());
+			shopUser.setCreatetime(new Date());
+			shopUser.setName(shop.getName());
+			shopUser.setPhone(shop.getPhone());
+			String salt = MD5Util.getRandomSalt(5);
+			shopUser.setPassword(MD5Util.md5(MD5Util.DEFAULT_PASSWORD,salt ));
+			shopUser.setSalt(salt);
+			shopUser.setRoleid(NOURMAL_SHOP_ROLE);
+			shopUser.setStatus(1);
+			shopUser.setVersion(1);
+
+			shopUserDao.addShopUser(shopUser);
 		}
 		save(shop);
 		result.setSuccess(true);
 		result.setMsg("保存商户成功");
 		return result;
-	}
-
-	public  String encryptMD5(String str){
-		try {
-			MessageDigest md5 = MessageDigest.getInstance("MD5");
-			BASE64Encoder base64Encoder = new BASE64Encoder();
-			return base64Encoder.encode(md5.digest(str.getBytes("utf-8")));
-		}catch (Exception e){
-			logger.error("MD5加密失败",e);
-		}
-		return null;
 	}
 
 	private boolean isNewRecord(Shop shop) {
